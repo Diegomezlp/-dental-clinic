@@ -4,6 +4,16 @@ const { PrismaClient } = require('@prisma/client');
 const auth = require('../middleware/auth');
 const prisma = new PrismaClient();
 
+// Limpia los datos: texto vacío pasa a null y la fecha se convierte
+const clean = (body) => {
+  const data = {};
+  for (const [k, v] of Object.entries(body)) {
+    data[k] = typeof v === 'string' && v.trim() === '' ? null : v;
+  }
+  if (data.birthDate) data.birthDate = new Date(data.birthDate);
+  return data;
+};
+
 // GET /api/patients
 router.get('/', auth, async (req, res) => {
   try {
@@ -41,7 +51,7 @@ router.get('/:id', auth, async (req, res) => {
 // POST /api/patients
 router.post('/', auth, async (req, res) => {
   try {
-    const patient = await prisma.patient.create({ data: req.body });
+    const patient = await prisma.patient.create({ data: clean(req.body) });
     res.status(201).json(patient);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -53,7 +63,7 @@ router.put('/:id', auth, async (req, res) => {
   try {
     const patient = await prisma.patient.update({
       where: { id: parseInt(req.params.id) },
-      data: req.body
+      data: clean(req.body)
     });
     res.json(patient);
   } catch (err) {
