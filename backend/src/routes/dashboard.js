@@ -1,20 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const { PrismaClient } = require('@prisma/client');
+const prisma = require('../prisma');
 const auth = require('../middleware/auth');
-const prisma = new PrismaClient();
+const { startOfDay, HOUR } = require('../time');
 
 // GET /api/dashboard/stats
 router.get('/stats', auth, async (req, res) => {
   try {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
+    const today = startOfDay();
+    const tomorrow = new Date(today.getTime() + 24 * HOUR);
 
     const [todayAppointments, totalPatients, completedToday] = await Promise.all([
       prisma.appointment.count({
-        where: { date: { gte: today, lt: tomorrow } }
+        where: { date: { gte: today, lt: tomorrow }, status: { not: 'CANCELLED' } }
       }),
       prisma.patient.count(),
       prisma.appointment.count({

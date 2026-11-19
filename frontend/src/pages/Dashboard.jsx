@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
+import { localToday } from '../services/dates';
 
 const StatCard = ({ icon, label, value, color }) => (
   <div className={`bg-white rounded-xl shadow p-6 border-l-4 ${color}`}>
@@ -18,7 +19,7 @@ export default function Dashboard() {
   const [appointments, setAppointments] = useState([]);
 
   useEffect(() => {
-    const today = new Date().toISOString().split('T')[0];
+    const today = localToday();
     Promise.all([
       api.get('/dashboard/stats'),
       api.get(`/appointments?date=${today}`)

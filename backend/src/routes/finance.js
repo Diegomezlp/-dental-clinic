@@ -4,22 +4,8 @@ const { PrismaClient } = require('@prisma/client');
 const auth = require('../middleware/auth');
 const prisma = new PrismaClient();
 
-// Render usa hora UTC. Guatemala es UTC-6 (sin cambio de hora).
-// Se puede cambiar con la variable TZ_OFFSET_HOURS.
-const OFFSET = parseInt(process.env.TZ_OFFSET_HOURS ?? '-6');
-
-function startOfToday() {
-  const local = new Date(Date.now() + OFFSET * 3600e3);
-  local.setUTCHours(0, 0, 0, 0);
-  return new Date(local.getTime() - OFFSET * 3600e3);
-}
-
-function startOfMonth() {
-  const local = new Date(Date.now() + OFFSET * 3600e3);
-  local.setUTCDate(1);
-  local.setUTCHours(0, 0, 0, 0);
-  return new Date(local.getTime() - OFFSET * 3600e3);
-}
+const { startOfDay, startOfMonth } = require('../time');
+const startOfToday = () => startOfDay();
 
 const sum = (rows) => rows.reduce((s, r) => s + r.amount, 0);
 const quoteTotal = (q) => q.items.reduce((s, i) => s + i.price * i.quantity, 0);

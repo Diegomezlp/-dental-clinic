@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
+import { localToday } from '../services/dates';
 
-const today = () => new Date().toISOString().split('T')[0];
+const today = localToday;
 const emptyForm = { patientId: '', dentistId: '', day: today(), time: '09:00', duration: 30, notes: '' };
 
 export default function Appointments() {
@@ -47,7 +48,11 @@ export default function Appointments() {
   };
 
   const setStatus = async (id, status) => {
-    await api.put(`/appointments/${id}`, { status });
+    try {
+      await api.put(`/appointments/${id}`, { status });
+    } catch (err) {
+      alert(err.response?.data?.error || err.message);
+    }
     load();
   };
 
