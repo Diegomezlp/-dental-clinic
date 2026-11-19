@@ -9,6 +9,7 @@ import Treatments from './pages/Treatments';
 import Quotes from './pages/Quotes';
 import Finance from './pages/Finance';
 import Inventory from './pages/Inventory';
+import Users from './pages/Users';
 import Layout from './components/Layout';
 
 const PrivateRoute = ({ children }) => {
@@ -33,6 +34,7 @@ export default function App() {
         <Route path="quotes" element={<Quotes />} />
         <Route path="finance" element={<Finance />} />
         <Route path="inventory" element={<Inventory />} />
+        <Route path="users" element={<Users />} />
       </Route>
     </Routes>
   );

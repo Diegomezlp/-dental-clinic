@@ -13,10 +13,22 @@ model User {
   password  String
   name      String
   role      Role     @default(RECEPTIONIST)
+  active    Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   appointments Appointment[]
+}
+
+model AuditLog {
+  id        Int      @id @default(autoincrement())
+  userId    Int?
+  userName  String
+  role      String
+  action    String
+  entity    String
+  path      String
+  createdAt DateTime @default(now())
 }
 
 enum Role {

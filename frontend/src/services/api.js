@@ -19,6 +19,9 @@ api.interceptors.response.use(
       localStorage.removeItem('token');
       window.location.href = '/login';
     }
+    if (err.response?.status === 403) {
+      alert('No tienes permiso para esta acción.');
+    }
     return Promise.reject(err);
   }
 );
