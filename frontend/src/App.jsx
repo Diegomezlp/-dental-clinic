@@ -10,6 +10,7 @@ import Quotes from './pages/Quotes';
 import Finance from './pages/Finance';
 import Inventory from './pages/Inventory';
 import Users from './pages/Users';
+import PatientDetail from './pages/PatientDetail';
 import Layout from './components/Layout';
 
 const PrivateRoute = ({ children }) => {
@@ -28,6 +29,7 @@ export default function App() {
       }>
         <Route index element={<Dashboard />} />
         <Route path="patients" element={<Patients />} />
+        <Route path="patients/:id" element={<PatientDetail />} />
         <Route path="appointments" element={<Appointments />} />
         <Route path="odontogram" element={<Odontogram />} />
         <Route path="treatments" element={<Treatments />} />

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import api from '../services/api';
 
 const emptyForm = {
@@ -120,7 +121,11 @@ export default function Patients() {
               <tr><td colSpan={4} className="text-center text-gray-400 py-6">Sin pacientes registrados</td></tr>
             ) : patients.map((p) => (
               <tr key={p.id} className="border-b last:border-0 hover:bg-gray-50">
-                <td className="py-2 font-medium">{p.firstName} {p.lastName}</td>
+                <td className="py-2 font-medium">
+                  <Link to={`/patients/${p.id}`} className="text-dental-700 hover:underline">
+                    {p.firstName} {p.lastName}
+                  </Link>
+                </td>
                 <td className="py-2">{p.phone}</td>
                 <td className="py-2">{p.email || '—'}</td>
                 <td className="py-2">{new Date(p.createdAt).toLocaleDateString('es')}</td>
