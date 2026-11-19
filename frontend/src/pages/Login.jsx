@@ -18,7 +18,13 @@ export default function Login() {
       localStorage.setItem('user', JSON.stringify(data.user));
       navigate('/');
     } catch (err) {
-      setError('Correo o contraseña incorrectos');
+      if (err.response?.status === 429) {
+        setError(err.response.data?.error || 'Demasiados intentos. Espera 15 minutos.');
+      } else if (!err.response) {
+        setError('No se pudo conectar con el servidor. Espera un minuto e intenta de nuevo.');
+      } else {
+        setError('Correo o contraseña incorrectos');
+      }
     } finally {
       setLoading(false);
     }

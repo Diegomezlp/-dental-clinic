@@ -3,6 +3,11 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const prisma = require('../prisma');
+const { loginLimiter, loginIpLimiter } = require('../middleware/rateLimit');
+
+// Hash falso: se compara igual cuando el correo no existe,
+// para que la respuesta tarde lo mismo y no se pueda adivinar quien tiene cuenta.
+const DUMMY_HASH = bcrypt.hashSync('contraseña-falsa-para-igualar-tiempo', 10);
 
 // POST /api/auth/register
 // Solo sirve para crear el PRIMER administrador. Despues se cierra.
@@ -30,15 +35,16 @@ router.post('/register', async (req, res) => {
 });
 
 // POST /api/auth/login
-router.post('/login', async (req, res) => {
+router.post('/login', loginIpLimiter, loginLimiter, async (req, res) => {
   try {
     const email = String(req.body.email || '').trim().toLowerCase();
-    const { password } = req.body;
+    const password = String(req.body.password || '');
     const user = await prisma.user.findUnique({ where: { email } });
-    if (!user || !user.active) return res.status(401).json({ error: 'Credenciales inválidas' });
 
-    const valid = await bcrypt.compare(password || '', user.password);
-    if (!valid) return res.status(401).json({ error: 'Credenciales inválidas' });
+    const valid = await bcrypt.compare(password, user ? user.password : DUMMY_HASH);
+    if (!user || !user.active || !valid) {
+      return res.status(401).json({ error: 'Credenciales inválidas' });
+    }
 
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role },

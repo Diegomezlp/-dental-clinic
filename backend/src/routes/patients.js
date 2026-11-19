@@ -5,9 +5,14 @@ const auth = require('../middleware/auth');
 const prisma = new PrismaClient();
 
 // Limpia los datos: texto vacío pasa a null y la fecha se convierte
+// Solo se aceptan estos campos (no se puede mandar id, fechas internas, etc.)
+const ALLOWED = ['firstName', 'lastName', 'email', 'phone', 'birthDate', 'address', 'allergies', 'medications', 'medicalNotes'];
+
 const clean = (body) => {
   const data = {};
-  for (const [k, v] of Object.entries(body)) {
+  for (const k of ALLOWED) {
+    if (body[k] === undefined) continue;
+    const v = body[k];
     data[k] = typeof v === 'string' && v.trim() === '' ? null : v;
   }
   if (data.birthDate) data.birthDate = new Date(data.birthDate);
