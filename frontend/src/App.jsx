@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Patients from './pages/Patients';
 import Appointments from './pages/Appointments';
+import Odontogram from './pages/Odontogram';
 import Layout from './components/Layout';
 
 const PrivateRoute = ({ children }) => {
@@ -23,6 +24,7 @@ export default function App() {
         <Route index element={<Dashboard />} />
         <Route path="patients" element={<Patients />} />
         <Route path="appointments" element={<Appointments />} />
+        <Route path="odontogram" element={<Odontogram />} />
       </Route>
     </Routes>
   );

@@ -41,6 +41,30 @@ model Patient {
   updatedAt    DateTime @updatedAt
 
   appointments Appointment[]
+  toothRecords ToothRecord[]
+}
+
+enum ToothCondition {
+  HEALTHY
+  CAVITY
+  FILLING
+  CROWN
+  ROOT_CANAL
+  IMPLANT
+  EXTRACTED
+  PENDING
+}
+
+model ToothRecord {
+  id        Int            @id @default(autoincrement())
+  patientId Int
+  tooth     Int
+  condition ToothCondition
+  notes     String?
+  userId    Int?
+  createdAt DateTime       @default(now())
+
+  patient Patient @relation(fields: [patientId], references: [id])
 }
 
 model Appointment {
