@@ -7,6 +7,7 @@ import Appointments from './pages/Appointments';
 import Odontogram from './pages/Odontogram';
 import Treatments from './pages/Treatments';
 import Quotes from './pages/Quotes';
+import Finance from './pages/Finance';
 import Layout from './components/Layout';
 
 const PrivateRoute = ({ children }) => {
@@ -29,6 +30,7 @@ export default function App() {
         <Route path="odontogram" element={<Odontogram />} />
         <Route path="treatments" element={<Treatments />} />
         <Route path="quotes" element={<Quotes />} />
+        <Route path="finance" element={<Finance />} />
       </Route>
     </Routes>
   );

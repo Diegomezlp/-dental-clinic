@@ -31,6 +31,7 @@ export default function Layout() {
           <NavLink to="/odontogram" className={navClass}>🦷 Odontograma</NavLink>
           <NavLink to="/treatments" className={navClass}>💊 Tratamientos</NavLink>
           <NavLink to="/quotes" className={navClass}>🧾 Presupuestos</NavLink>
+          <NavLink to="/finance" className={navClass}>💰 Finanzas</NavLink>
         </nav>
         <div className="p-4 border-t">
           <button

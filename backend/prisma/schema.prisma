@@ -43,6 +43,36 @@ model Patient {
   appointments Appointment[]
   toothRecords ToothRecord[]
   quotes       Quote[]
+  payments     Payment[]
+}
+
+enum PaymentMethod {
+  CASH
+  CARD
+  TRANSFER
+}
+
+model Payment {
+  id        Int           @id @default(autoincrement())
+  patientId Int
+  quoteId   Int?
+  amount    Float
+  method    PaymentMethod @default(CASH)
+  notes     String?
+  userId    Int?
+  createdAt DateTime      @default(now())
+
+  patient Patient @relation(fields: [patientId], references: [id])
+  quote   Quote?  @relation(fields: [quoteId], references: [id])
+}
+
+model Expense {
+  id          Int      @id @default(autoincrement())
+  description String
+  category    String   @default("Otros")
+  amount      Float
+  userId      Int?
+  createdAt   DateTime @default(now())
 }
 
 model Treatment {
@@ -71,6 +101,7 @@ model Quote {
 
   patient Patient     @relation(fields: [patientId], references: [id])
   items   QuoteItem[]
+  payments Payment[]
 }
 
 model QuoteItem {
