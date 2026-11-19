@@ -29,6 +29,8 @@ export default function Layout() {
           <NavLink to="/patients" className={navClass}>👥 Pacientes</NavLink>
           <NavLink to="/appointments" className={navClass}>📅 Citas</NavLink>
           <NavLink to="/odontogram" className={navClass}>🦷 Odontograma</NavLink>
+          <NavLink to="/treatments" className={navClass}>💊 Tratamientos</NavLink>
+          <NavLink to="/quotes" className={navClass}>🧾 Presupuestos</NavLink>
         </nav>
         <div className="p-4 border-t">
           <button

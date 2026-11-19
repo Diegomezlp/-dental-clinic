@@ -42,6 +42,48 @@ model Patient {
 
   appointments Appointment[]
   toothRecords ToothRecord[]
+  quotes       Quote[]
+}
+
+model Treatment {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  price     Float
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  items QuoteItem[]
+}
+
+enum QuoteStatus {
+  DRAFT
+  ACCEPTED
+  COMPLETED
+  REJECTED
+}
+
+model Quote {
+  id        Int         @id @default(autoincrement())
+  patientId Int
+  status    QuoteStatus @default(DRAFT)
+  notes     String?
+  createdAt DateTime    @default(now())
+
+  patient Patient     @relation(fields: [patientId], references: [id])
+  items   QuoteItem[]
+}
+
+model QuoteItem {
+  id          Int     @id @default(autoincrement())
+  quoteId     Int
+  treatmentId Int
+  tooth       Int?
+  quantity    Int     @default(1)
+  price       Float
+  done        Boolean @default(false)
+
+  quote     Quote     @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  treatment Treatment @relation(fields: [treatmentId], references: [id])
 }
 
 enum ToothCondition {
