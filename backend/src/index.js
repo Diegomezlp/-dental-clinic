@@ -15,6 +15,7 @@ app.use('/api/odontogram', require('./routes/odontogram'));
 app.use('/api/treatments', require('./routes/treatments'));
 app.use('/api/quotes', require('./routes/quotes'));
 app.use('/api/finance', require('./routes/finance'));
+app.use('/api/inventory', require('./routes/inventory'));
 app.use('/api/dashboard', require('./routes/dashboard'));
 
 // Health check para Render

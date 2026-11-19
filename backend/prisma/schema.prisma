@@ -66,6 +66,47 @@ model Payment {
   quote   Quote?  @relation(fields: [quoteId], references: [id])
 }
 
+model Supplier {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  phone     String?
+  email     String?
+  createdAt DateTime @default(now())
+
+  items InventoryItem[]
+}
+
+model InventoryItem {
+  id         Int      @id @default(autoincrement())
+  name       String   @unique
+  unit       String   @default("unidad")
+  stock      Int      @default(0)
+  minStock   Int      @default(0)
+  active     Boolean  @default(true)
+  supplierId Int?
+  createdAt  DateTime @default(now())
+
+  supplier  Supplier?       @relation(fields: [supplierId], references: [id])
+  movements StockMovement[]
+}
+
+enum MovementType {
+  IN
+  OUT
+}
+
+model StockMovement {
+  id        Int          @id @default(autoincrement())
+  itemId    Int
+  type      MovementType
+  quantity  Int
+  notes     String?
+  userId    Int?
+  createdAt DateTime     @default(now())
+
+  item InventoryItem @relation(fields: [itemId], references: [id])
+}
+
 model Expense {
   id          Int      @id @default(autoincrement())
   description String
